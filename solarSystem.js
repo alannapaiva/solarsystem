@@ -76,10 +76,27 @@ const marsMaterial = new THREE.MeshBasicMaterial({ map: texturaMars });
 const mars = new THREE.Mesh(marsGeometry, marsMaterial);
 scene.add(mars);
 
+// Creates Phobos (Mars Moon)
+const texturaPhobos = textureLoader.load('./textures/phobos_map.jpg');
+
+const phobosGeometry = new THREE.SphereGeometry(0.03, 32, 32);
+const phobosMaterial = new THREE.MeshBasicMaterial({ map: texturaPhobos });
+const phobos = new THREE.Mesh(phobosGeometry, phobosMaterial);
+scene.add(phobos);
+
+// Creates Deimos (Mars Moon)
+const texturaDeimos = textureLoader.load('./textures/deimos_map.jpg');
+
+const deimosGeometry = new THREE.SphereGeometry(0.02, 32, 32);
+const deimosMaterial = new THREE.MeshBasicMaterial({ map: texturaDeimos });
+const deimos = new THREE.Mesh(deimosGeometry, deimosMaterial);
+scene.add(deimos);
+
+
 // Creates Ceres
 const texturaCeres = textureLoader.load('./textures/ceres_map.png'); 
 
-const ceresGeometry = new THREE.SphereGeometry(0.03, 32, 32); 
+const ceresGeometry = new THREE.SphereGeometry(0.04, 32, 32); 
 const ceresMaterial = new THREE.MeshBasicMaterial({ map: texturaCeres });
 const ceres = new THREE.Mesh(ceresGeometry, ceresMaterial);
 ceres.position.set(1.5, 0, 0); 
@@ -159,8 +176,10 @@ mercury.position.x = 3.5;
 venus.position.x = 4.5;
 earth.position.x = 5.4;
 moon.position.x = 1;
-mars.position.x = 6.7
-ceres.position.x = 7.1
+mars.position.x = 6.5
+phobos.position.x = 0.3
+deimos.position.x = 0.5
+ceres.position.x = 7.3
 jupiter.position.x = 8;
 saturn.position.x = 10;
 uranus.position.x = 12.8; 
@@ -177,9 +196,9 @@ const earthOrbit = createOrbit(5.4, 64); // earth orbit line
 scene.add(earthOrbit);
 const orbit = createOrbit(1, 64); // moon orbit line
 scene.add(mercuryOrbit);
-const marsOrbit = createOrbit(6.7, 64); // mars orbit line
+const marsOrbit = createOrbit(6.5, 64); // mars orbit line
 scene.add(marsOrbit);
-const ceresOrbit = createOrbit(7.1, 64); // ceres orbit line
+const ceresOrbit = createOrbit(7.3, 64); // ceres orbit line
 scene.add(ceresOrbit);
 const jupterOrbit = createOrbit(8, 64); // jupter orbit line
 scene.add(jupterOrbit);
@@ -204,29 +223,34 @@ controls.minDistance = 2;
 controls.maxDistance = 20; 
 controls.update();
 
-//Controle de interação com usuário
+// Get references to the HTML buttons by their IDs
 const aumentarVelocidade = document.getElementById("aumentarVelocidade");
 const diminuirVelocidade = document.getElementById("diminuirVelocidade");
 const reset = document.getElementById("reset");
 
 let speed = 1;
-
+// Get references to the HTML buttons by their IDs
 aumentarVelocidade.addEventListener("click", ()=>{
-  speed += 0.1;
+  // Increase the speed by 0.1 when the button is clicked
+  speed += 0.3;
   console.log(speed)
 });
-
+// Add an event listener to the "diminuirVelocidade" button
 diminuirVelocidade.addEventListener("click", ()=>{
-  speed -= 0.1;
+  // Decrease the speed by 0.1 when the button is clicked
+  speed -= 0.3;
   if(speed < 0){
     speed = 0;
   }
   console.log(speed)
 });
-
+// Add an event listener to the "reset" button
 reset.addEventListener("click", ()=>{
+  // Reset the speed to the default value of 1
   speed = 1;
 })
+
+
 
 // Animation loop
 function animate() {
@@ -261,16 +285,27 @@ function animate() {
 
   // Rotate Mars
   mars.rotation.y += 0.0075 * speed; 
-  mars.position.x = 6.7 * Math.cos(mars.rotation.y); 
-  mars.position.z = 6.7 * Math.sin(mars.rotation.y); 
+  mars.position.x = 6.5 * Math.cos(mars.rotation.y); 
+  mars.position.z = 6.5 * Math.sin(mars.rotation.y); 
+
+  // Rotate the phobos around mars
+  phobos.rotation.y += 0.0400 * speed;
+  phobos.position.x = mars.position.x + 0.3 * Math.cos(phobos.rotation.y);
+  phobos.position.z = mars.position.z + 0.3 * Math.sin(phobos.rotation.y);
+
+  // Rotate the deimos around mars
+  deimos.rotation.y += 0.0200 * speed;
+  deimos.position.x = mars.position.x + 0.5 * Math.cos(deimos.rotation.y);
+  deimos.position.z = mars.position.z + 0.5 * Math.sin(deimos.rotation.y);
+
 
   // Rotate AsteroidBelt
   asteroidBelt.rotation.y -= 0.003;
 
   // Rotate Ceres
-  ceres.rotation.y += 0.004; 
-  ceres.position.x = 7.1 * Math.cos(ceres.rotation.y); 
-  ceres.position.z = 7.1 * Math.sin(ceres.rotation.y); 
+  ceres.rotation.y += 0.004 * speed; 
+  ceres.position.x = 7.3 * Math.cos(ceres.rotation.y); 
+  ceres.position.z = 7.3 * Math.sin(ceres.rotation.y); 
 
   // Rotate Jupiter
   jupiter.rotation.y += 0.0158 * speed; 
@@ -303,7 +338,7 @@ function animate() {
   pluto.position.z = 16.5 * Math.sin(pluto.rotation.y);
 
   // Rotate Eris
-  eris.rotation.y += 0.0045;
+  eris.rotation.y += 0.0045 * speed;
   eris.position.x = 18.5 * Math.cos(eris.rotation.y);
   eris.position.z = 18.5 * Math.sin(eris.rotation.y);
 
