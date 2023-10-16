@@ -1,5 +1,9 @@
 # Simulação do sistema solar
+![view1](app_view/view1.png)
+
 Esse código é uma aplicação JavaScript que simula o movimento de objetos celestes no sistema solar usando a biblioteca Three.js. A simulação inclui o Sol, os planetas, algumas luas, os cinturões de asteroides e as órbitas, e permite que você controle a velocidade da animação. Segue abaixo uma explicação das funcionalidades e como interagir com elas.
+
+![view2](app_view/view2.png)
 ### Funcionalidades
 **Representação visual:** _O código cria uma representação visual do sistema solar com objetos celestes, incluindo o Sol, os planetas e algumas luas._
 
